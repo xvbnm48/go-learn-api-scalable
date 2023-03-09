@@ -2,6 +2,8 @@ package helper
 
 import "github.com/gin-gonic/gin"
 
+// helper function for handle error
+
 func PanicIfError(err error) {
 	if err != nil {
 		panic(err)
