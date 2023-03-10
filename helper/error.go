@@ -10,6 +10,7 @@ func PanicIfError(err error) {
 	}
 }
 
+// HandleErr handle error
 func HandleErr(ctx *gin.Context, err error) {
 	if err != nil {
 		//PanicIfError(err)
