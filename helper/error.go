@@ -14,6 +14,7 @@ func PanicIfError(err error) {
 func HandleErr(ctx *gin.Context, err error) {
 	if err != nil {
 		//PanicIfError(err)
+		// handle json response
 		ctx.JSON(404, gin.H{
 			"message": err.Error(),
 		})
