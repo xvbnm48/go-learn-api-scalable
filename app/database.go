@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	host   = "postgres"
+	host   = "localhost"
 	user   = "postgres"
 	pass   = "fariz"
 	port   = "5432"
