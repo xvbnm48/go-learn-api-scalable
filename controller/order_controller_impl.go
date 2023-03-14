@@ -18,7 +18,7 @@ func (o OrderControllerImpl) Create(ctx *gin.Context) {
 	var request request.OrderCreate
 
 	err := ctx.ShouldBindJSON(&request)
-	helper.PanicIfError(err)
+	helper.HandleErr(ctx, err)
 
 	response := o.OrderService.Create(request)
 	ctx.JSON(200, web.Response{
@@ -33,7 +33,7 @@ func (o OrderControllerImpl) Update(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	err := ctx.ShouldBindJSON(&request)
-	helper.PanicIfError(err)
+	helper.HandleErr(ctx, err)
 
 	response := o.OrderService.Update(request, id)
 	ctx.JSON(200, web.Response{
@@ -46,7 +46,7 @@ func (o OrderControllerImpl) Update(ctx *gin.Context) {
 func (o OrderControllerImpl) Delete(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	err := o.OrderService.Delete(id)
-	helper.PanicIfError(err)
+	helper.HandleErr(ctx, err)
 
 	ctx.JSON(200, web.Response{
 		Code:   200,
@@ -57,7 +57,16 @@ func (o OrderControllerImpl) Delete(ctx *gin.Context) {
 func (o OrderControllerImpl) FindById(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	response, err := o.OrderService.FindById(id)
-	helper.PanicIfError(err)
+	// if data not found
+	if err != nil {
+		ctx.JSON(404, web.Response{
+			Code:   404,
+			Status: "Not Found",
+			Data:   nil,
+		})
+		return
+	}
+	helper.HandleErr(ctx, err)
 	ctx.JSON(200, web.Response{
 		Code:   200,
 		Status: "OK",
@@ -67,7 +76,7 @@ func (o OrderControllerImpl) FindById(ctx *gin.Context) {
 
 func (o OrderControllerImpl) FindAll(ctx *gin.Context) {
 	response, err := o.OrderService.FindAll()
-	helper.PanicIfError(err)
+	helper.HandleErr(ctx, err)
 	ctx.JSON(200, web.Response{
 		Code:   200,
 		Status: "OK",
